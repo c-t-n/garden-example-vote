@@ -1,0 +1,64 @@
+version: 2.1
+
+jobs:
+  garden-test-ee:
+    docker:
+        # Note: Here we're using the Enterprise Edition, which needs authentication to retrieve. To use the community
+        #       edition, replace the image with gardendev/garden-cloud:<version> and remove the auth block.
+      - image: gardendev/garden-ee-gcloud:v0.9.11
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - configure_kubectl_context
+      - run:
+          name: Builld project
+          command: garden build --force --logger-type=basic --env=remote-ee
+      - run:
+          name: Test project
+          command: garden test --logger-type=basic --env=remote-ee
+      - run:
+          name: Cleanup
+          command: garden delete env --logger-type=basic --env=remote-ee
+          when: always
+  garden-test:
+    docker:
+      - image: gardendev/garden-gcloud:v0.9.11
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - configure_kubectl_context
+      - run:
+          name: Test project
+          command: garden test --logger-type=basic --env=remote
+      - run:
+          name: Cleanup
+          command: garden delete env --logger-type=basic --env=remote
+          when: always
+workflows:
+  version: 2
+  test:
+    jobs:
+      # - garden-test-ee:
+      #     context: docker
+      - garden-test:
+          context: docker
+
+commands:
+  configure_kubectl_context:
+    description: Configure the kubectl context so that we can access our remote cluster
+    steps:
+      - run:
+          name: Configure kubectl context via gloud
+          command: |
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+            gcloud --quiet config set project $GOOGLE_PROJECT_ID && gcloud --quiet config set compute/zone $GOOGLE_COMPUTE_ZONE
+            gcloud --quiet container clusters get-credentials $GOOGLE_CLUSTER_ID --zone $GOOGLE_COMPUTE_ZONE
+            # Have to symilnk docker-credential-gcloud to path for the "gcloud auth configure-docker" command to work.
+            # This is a known issue: https://stackoverflow.com/questions/49780218/docker-credential-gcloud-not-in-system-path
+            ln -s /gcloud/google-cloud-sdk/bin/docker-credential-gcloud /usr/local/bin/
+            gcloud --quiet auth configure-docker

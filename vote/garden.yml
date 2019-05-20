@@ -1,0 +1,28 @@
+kind: Module
+description: The voting UI
+name: vote
+# repositoryUrl: http://github.com/garden-io/garden...
+type: container
+hotReload:
+  sync:
+    - target: /app/src
+      source: src
+services:
+  - name: vote
+    args: [npm, run, serve]
+    ports:
+      - name: http
+        containerPort: 8080
+    ingresses:
+      - path: /
+        port: http
+        hostname: vote.${variables.base-hostname}
+    dependencies:
+      - api
+tests:
+  - name: unit
+    args: [npm, run, test:unit]
+  - name: integ
+    args: [npm, run, test:integ]
+    dependencies:
+      - api

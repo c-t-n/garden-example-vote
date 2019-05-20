@@ -1,0 +1,20 @@
+kind: Module
+description: The backend for the voting UI
+type: container
+name: api
+services:
+  - name: api
+    args: [python, app.py]
+    ingresses:
+      - path: /
+        hostname: api.${variables.base-hostname}
+        port: interface
+    ports:
+      - name: interface
+        protocol: TCP
+        containerPort: 80
+    dependencies:
+      - redis
+tests:
+  - name: unit
+    args: [echo, ok]
