@@ -22,7 +22,7 @@ environments:
       base-hostname: ${local.env.CIRCLE_BRANCH || local.env.USER}.demo.garden
   - name: remote-ee
     providers:
-      - name: kubernetes-ee
+      - name: kubernetes
         context: gke_garden-dev-200012_europe-west1-b_garden-dev-1
         buildMode: cluster-docker
         defaultHostname: ${local.env.CIRCLE_BRANCH || local.env.USER}.demo.garden
