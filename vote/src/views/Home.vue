@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Vote optionA="Tabs" optionB="Spaces"/>
+    <Vote optionA="Daimler" optionB="Audi"/>
     <!-- <Vote optionA="Pizza" optionB="Hot Dogs"/> -->
   </div>
 </template>
