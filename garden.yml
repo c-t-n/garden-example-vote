@@ -11,21 +11,8 @@ environments:
     providers:
       - name: kubernetes
         context: gke_garden-dev-200012_europe-west1-b_garden-dev-1
-        defaultHostname: ${local.env.CIRCLE_BRANCH || local.env.USER}.demo.garden
-        namespace: vote-${local.env.CIRCLE_BRANCH || local.env.USER}
-        deploymentRegistry:
-          # The hostname of the registry, e.g. gcr.io for GCR (Google Container Registry)
-          hostname: eu.gcr.io
-          # Namespace to use in the registry for this project. For GCR, use the project ID where your cluster is.
-          namespace: garden-dev-200012
-    variables:
-      base-hostname: ${local.env.CIRCLE_BRANCH || local.env.USER}.demo.garden
-  - name: remote-ee
-    providers:
-      - name: kubernetes
-        context: gke_garden-dev-200012_europe-west1-b_garden-dev-1
         buildMode: cluster-docker
-        defaultHostname: ${local.env.CIRCLE_BRANCH || local.env.USER}.demo.garden
+        defaultHostname: vote-${local.env.CIRCLE_BRANCH || local.env.USER}.demo.garden
         namespace: vote-${local.env.CIRCLE_BRANCH || local.env.USER}
     variables:
-      base-hostname: ${local.env.CIRCLE_BRANCH || local.env.USER}.demo.garden
+      base-hostname: vote-${local.env.CIRCLE_BRANCH || local.env.USER}.demo.garden
