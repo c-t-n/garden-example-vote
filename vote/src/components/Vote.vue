@@ -3,7 +3,7 @@
         <div id="content-container">
       <div id="content-container-center">
          <div id="choice" >
-        <h3>Tabs vs Spaces!</h3>
+        <h3>GCP vs AWS</h3>
           <button id="a" type="submit" name="vote" class="a" v-on:click="vote('a')" value="a">{{optionA}}</button>
           <button id="b" type="submit" name="vote" class="b" v-on:click="vote('b')" value="b">{{optionB}}</button>
 
