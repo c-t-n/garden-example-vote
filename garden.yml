@@ -10,7 +10,8 @@ environments:
   - name: remote
     providers:
       - name: kubernetes
-        context: gke_garden-dev-200012_europe-west1-b_garden-dev-1
+        # context: gke_garden-dev-200012_europe-west1-b_garden-dev-1
+        context: gke_garden-platform_us-west1-a_kcn-demo
         buildMode: cluster-docker
         defaultHostname: vote-${local.env.CIRCLE_BRANCH || local.env.USER}.demo.garden
         namespace: vote-${local.env.CIRCLE_BRANCH || local.env.USER}
