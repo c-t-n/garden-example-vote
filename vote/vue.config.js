@@ -1,6 +1,6 @@
 module.exports = {
   devServer: {
     disableHostCheck: true,
-    public: 'http://vote.local.app.garden',
+    public: `vote.${process.env.VUE_APP_HOSTNAME}`,
   },
 };
