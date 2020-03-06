@@ -1,5 +1,6 @@
 kind: Project
 name: vote
+defaultEnvironment: remote
 environments:
   - name: local
     providers:
@@ -10,10 +11,15 @@ environments:
   - name: remote
     providers:
       - name: kubernetes
-        # context: gke_garden-dev-200012_europe-west1-b_garden-dev-1
-        context: gke_garden-platform_us-west1-a_kcn-demo
+        # Replace these values as appropriate
+        context: gke_garden-dev-200012_europe-west1-b_garden-demo-1
+        setupIngressController: nginx
         buildMode: cluster-docker
-        defaultHostname: vote-${local.env.CIRCLE_BRANCH || local.env.USER}.demo.garden
+        defaultHostname: vote-${local.env.CIRCLE_BRANCH || local.env.USER}.dev.demo.garden
         namespace: vote-${local.env.CIRCLE_BRANCH || local.env.USER}
     variables:
-      base-hostname: vote-${local.env.CIRCLE_BRANCH || local.env.USER}.demo.garden
+      base-hostname: vote-${local.env.CIRCLE_BRANCH || local.env.USER}.dev.demo.garden
+      postgres-database: postgres
+      # Only use for testing!
+      postgres-username: postgres
+      postgres-password: test-password
